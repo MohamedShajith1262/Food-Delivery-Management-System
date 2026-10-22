@@ -1,7 +1,5 @@
 package com.fooddelivery.model;
 
-import com.fooddelivery.model.enums.Role;
-
 public class User {
 
     private int userId;
@@ -9,10 +7,9 @@ public class User {
     private String phoneNumber;
     private String username;
     private String password;
-    private Role role;
+    private String role;
 
-    public User(int userId, String name, String phoneNumber,
-                String username, String password, Role role) {
+    public User(int userId, String name, String phoneNumber, String username, String password, String role) {
         this.userId = userId;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -41,7 +38,7 @@ public class User {
         return password;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 }

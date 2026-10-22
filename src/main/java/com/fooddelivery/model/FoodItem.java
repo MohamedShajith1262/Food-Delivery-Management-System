@@ -1,20 +1,25 @@
 package com.fooddelivery.model;
 
-import com.fooddelivery.model.enums.FoodCategory;
-
 public class FoodItem {
 
     private int foodItemId;
     private String foodName;
     private double foodPrice;
-    private FoodCategory foodCategory;
+    private String foodCategory;
     private boolean availability;
 
     public FoodItem(int foodItemId, String foodName,
-                    double foodPrice, FoodCategory foodCategory,
+                    double foodPrice, String foodCategory,
                     boolean availability) {
 
         this.foodItemId = foodItemId;
+        this.foodName = foodName;
+        this.foodPrice = foodPrice;
+        this.foodCategory = foodCategory;
+        this.availability = availability;
+    }
+
+    public FoodItem(String foodName, double foodPrice, String foodCategory, boolean availability) {
         this.foodName = foodName;
         this.foodPrice = foodPrice;
         this.foodCategory = foodCategory;
@@ -37,7 +42,7 @@ public class FoodItem {
         return foodPrice;
     }
 
-    public FoodCategory getFoodCategory() {
+    public String getFoodCategory() {
         return foodCategory;
     }
 
@@ -55,7 +60,7 @@ public class FoodItem {
         }
     }
 
-    public void setFoodCategory(FoodCategory foodCategory) {
+    public void setFoodCategory(String foodCategory) {
         this.foodCategory = foodCategory;
     }
 

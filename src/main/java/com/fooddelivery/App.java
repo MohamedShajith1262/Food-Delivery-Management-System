@@ -1,10 +1,9 @@
 package com.fooddelivery;
 
-/**
- * Hello world!
- */
+import com.fooddelivery.views.MainView;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+
     }
 }

@@ -1,72 +1,100 @@
 package com.fooddelivery.model;
 
-import com.fooddelivery.model.enums.Role;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Admin extends User {
 
-    private List<Restaurant> managedRestaurants = new ArrayList<>();
-
     public Admin(int userId, String name, String phoneNumber,
                  String username, String password) {
 
-        super(userId, name, phoneNumber, username, password,
-                Role.ADMIN);
+        super(userId, name, phoneNumber, username, password, "ADMIN");
     }
 
-    public void addRestaurant(Restaurant restaurant) {
-        if (restaurant != null
-                && findRestaurant(restaurant.getRestaurantId()) == null) {
+    public boolean addRestaurant(List<Restaurant> restaurants, Restaurant restaurant) {
+        if (restaurant != null){
+            restaurants.add(restaurant);
+            return true;
+        }
+        return false;
+    }
 
-            managedRestaurants.add(restaurant);
+    public boolean updateRestaurant(List<Restaurant> restaurantList, Restaurant updatedRestaurant, int restaurantId) {
+        if (updatedRestaurant == null) {
+            return false;
+        }
+
+        Restaurant existingRestaurant = restaurantList.stream()
+                .filter(restaurant -> restaurant.getRestaurantId() == restaurantId)
+                .findFirst().orElse(null);
+
+        if (existingRestaurant != null) {
+            existingRestaurant.setName(updatedRestaurant.getName());
+            existingRestaurant.setLocation(updatedRestaurant.getLocation());
+            existingRestaurant.setPhoneNumber(updatedRestaurant.getPhoneNumber());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean deleteRestaurant(List<Restaurant> restaurants, int restaurantId) {
+        if (!restaurants.isEmpty()) {
+            restaurants.removeIf(restaurant ->
+                    restaurant.getRestaurantId() == restaurantId);
+            return true;
+        }else {
+            return false;
         }
     }
 
-    public void updateRestaurant(Restaurant restaurant) {
-        if (restaurant == null) {
-            return;
-        }
+    public List<Order> getRestaurantOrders(List<Restaurant> restaurants, int restaurantId) {
+        Restaurant selectedRestaurant = restaurants.stream()
+                .filter(restaurant1-> restaurant1.getRestaurantId() == restaurantId)
+                .findFirst().orElse(null);
 
-        Restaurant existing =
-                findRestaurant(restaurant.getRestaurantId());
-
-        if (existing != null) {
-            existing.setName(restaurant.getName());
-            existing.setLocation(restaurant.getLocation());
-            existing.setPhoneNumber(restaurant.getPhoneNumber());
-        }
-    }
-
-    public void deleteRestaurant(int restaurantId) {
-        managedRestaurants.removeIf(
-                restaurant ->
-                        restaurant.getRestaurantId() == restaurantId
-        );
-    }
-
-    public List<Restaurant> getManagedRestaurants() {
-        return new ArrayList<>(managedRestaurants);
-    }
-
-    public List<Order> getRestaurantOrders(int restaurantId) {
-        Restaurant restaurant = findRestaurant(restaurantId);
-
-        if (restaurant == null) {
+        if (selectedRestaurant == null) {
             return new ArrayList<>();
         }
 
-        return restaurant.getOrders();
+        return selectedRestaurant.getOrders();
     }
 
-    private Restaurant findRestaurant(int restaurantId) {
-        for (Restaurant restaurant : managedRestaurants) {
-            if (restaurant.getRestaurantId() == restaurantId) {
-                return restaurant;
-            }
+    public boolean addFoodItem(List<Restaurant> restaurants, int restaurantId, FoodItem foodItem) {
+        if (foodItem == null) {
+            return false;
         }
+        Restaurant selectedRestaurant = restaurants.stream()
+                .filter(restaurant -> restaurant.getRestaurantId() == restaurantId)
+                .findAny().orElse(null);
+        if (selectedRestaurant != null){
+            selectedRestaurant.addFoodItem(foodItem);
+            return true;
+        }
+        return false;
+    }
 
-        return null;
+    public boolean updateFoodItem(List<Restaurant> restaurants, int restaurantId, FoodItem updatedFoodItem, int foodItemId){
+        if (updatedFoodItem == null){
+            return false;
+        }
+        Restaurant findRestaurant = restaurants.stream()
+                .filter(restaurant -> restaurant.getRestaurantId() == restaurantId)
+                .findFirst().orElse(null);
+        if (findRestaurant != null){
+            findRestaurant.updateFoodItem(updatedFoodItem, foodItemId);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean deleteFoodItem(List<Restaurant> restaurants, int restaurantId, int foodItemId){
+        Restaurant restaurant = restaurants.stream()
+                .filter(r -> r.getRestaurantId() == restaurantId)
+                .findFirst().orElse(null);
+        if (restaurant != null){
+            restaurant.deleteFoodItem(foodItemId);
+            return true;
+        }
+        return false;
     }
 }

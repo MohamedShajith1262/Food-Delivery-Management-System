@@ -1,9 +1,6 @@
 package com.fooddelivery.views;
 
 import com.fooddelivery.model.Payment;
-import com.fooddelivery.model.enums.PaymentMode;
-import com.fooddelivery.model.enums.PaymentStatus;
-
 import java.util.Scanner;
 
 public class PaymentView {
@@ -11,32 +8,33 @@ public class PaymentView {
     private Scanner sc = new Scanner(System.in);
 
     public void showPaymentOptions() {
-        System.out.println("\n----- PAYMENT OPTIONS -----");
+        System.out.println("----- PAYMENT OPTIONS -----");
         System.out.println("1. Cash");
         System.out.println("2. UPI");
         System.out.println("3. Card");
     }
 
-    public PaymentMode getPaymentMode() {
-        System.out.print("Choose payment mode: ");
-        int choice = Integer.parseInt(sc.nextLine());
+    public String getPaymentMode() {
+        System.out.print("Choose Payment Mode: ");
+        int paymentChoice = sc.nextInt();
 
-        switch (choice) {
+        switch (paymentChoice) {
             case 1:
-                return PaymentMode.CASH;
+                return "CASH";
             case 2:
-                return PaymentMode.UPI;
+                return "UPI";
             case 3:
-                return PaymentMode.CARD;
+                return "CARD";
             default:
-                System.out.println("Invalid payment mode.");
+                System.out.println("Invalid payment mode!.. Please choose the correct option...");
                 return null;
         }
     }
 
-    public void displayPaymentResult(PaymentStatus status) {
-        System.out.println("\n----- PAYMENT RESULT -----");
+    public void displayPaymentResult(String status) {
+        System.out.println("----- PAYMENT RESULT -----");
         System.out.println("Payment Status: " + status);
+        System.out.println("---------------------------");
     }
 
     public void displayPaymentDetails(Payment payment) {
@@ -45,7 +43,7 @@ public class PaymentView {
             return;
         }
 
-        System.out.println("\n----- PAYMENT DETAILS -----");
+        System.out.println("----- PAYMENT DETAILS -----");
         System.out.println("Payment ID: " + payment.getPaymentId());
         System.out.println("Amount: Rs." + payment.getAmount());
         System.out.println("Payment Mode: " + payment.getPaymentMode());

@@ -21,31 +21,34 @@ public class Restaurant {
         this.phoneNumber = phoneNumber;
     }
 
+    public Restaurant(String name, String location, String phoneNumber) {
+        this.name = name;
+        this.location = location;
+        this.phoneNumber = phoneNumber;
+    }
+
     public void addFoodItem(FoodItem foodItem) {
-        if (foodItem != null
-                && findFoodItem(foodItem.getFoodItemId()) == null) {
+        if (foodItem != null && findFoodItem(foodItem.getFoodItemId()) == null) {
             foodItems.add(foodItem);
         }
     }
 
-    public void updateFoodItem(FoodItem foodItem) {
+    public void updateFoodItem(FoodItem foodItem, int foodItemId) {
         if (foodItem == null) {
             return;
         }
-
-        for (int i = 0; i < foodItems.size(); i++) {
-            if (foodItems.get(i).getFoodItemId()
-                    == foodItem.getFoodItemId()) {
-                foodItems.set(i, foodItem);
-                return;
-            }
+        FoodItem existingFoodItem = findFoodItem(foodItemId);
+        if (existingFoodItem == null){
+            return;
         }
+        existingFoodItem.setFoodName(foodItem.getFoodName());
+        existingFoodItem.setFoodPrice(foodItem.getFoodPrice());
+        existingFoodItem.setFoodCategory(foodItem.getFoodCategory());
+        existingFoodItem.setAvailability(foodItem.checkAvailability());
     }
 
     public void deleteFoodItem(int foodItemId) {
-        foodItems.removeIf(
-                item -> item.getFoodItemId() == foodItemId
-        );
+        foodItems.removeIf(item -> item.getFoodItemId() == foodItemId);
     }
 
     public List<FoodItem> getFoodItems() {
@@ -85,6 +88,10 @@ public class Restaurant {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public void setRestaurantId(int restaurantId){
+        this.restaurantId = restaurantId;
     }
 
     public void setName(String name) {

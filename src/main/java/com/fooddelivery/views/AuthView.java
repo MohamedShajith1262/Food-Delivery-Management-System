@@ -4,14 +4,13 @@ import java.util.Scanner;
 
 
 import com.fooddelivery.model.Address;
-import com.fooddelivery.model.enums.Role;
 
 public class AuthView {
 
     private Scanner sc = new Scanner(System.in);
 
     public void showLoginPrompt() {
-        System.out.println("\n----- LOGIN -----");
+        System.out.println("----- LOGIN -----");
     }
 
     public String getUsername() {
@@ -33,7 +32,7 @@ public class AuthView {
     }
 
     public void showRegistrationForm() {
-        System.out.println("\n----- REGISTRATION -----");
+        System.out.println("----- REGISTRATION -----");
     }
 
     public void displayRegistrationResult(boolean success) {
@@ -44,7 +43,7 @@ public class AuthView {
         }
     }
 
-    public Role getLoginType() {
+    public String getLoginType() {
         System.out.println("1. Customer");
         System.out.println("2. Admin");
         System.out.print("Choose account type: ");
@@ -52,9 +51,9 @@ public class AuthView {
         int choice = Integer.parseInt(sc.nextLine());
 
         if (choice == 1) {
-            return Role.CUSTOMER;
+            return "CUSTOMER";
         } else if (choice == 2) {
-            return Role.ADMIN;
+            return "ADMIN";
         }
 
         System.out.println("Invalid choice.");
@@ -72,16 +71,28 @@ public class AuthView {
     }
 
     public Address getAddress() {
-        System.out.print("Enter address: ");
-        String addressLine = sc.nextLine();
+        System.out.println("Enter Address Id: ");
+        int addressId = sc.nextInt();
 
-        System.out.print("Enter city: ");
+        System.out.print("Enter Door Number: ");
+        String doorNumber = sc.nextLine();
+
+        System.out.println("Enter Street Name: ");
+        String streetName = sc.nextLine();
+
+        System.out.print("Enter City: ");
         String city = sc.nextLine();
 
-        System.out.print("Enter pincode: ");
+        System.out.print("Enter Pincode: ");
         String pincode = sc.nextLine();
 
-        return new Address(addressLine, city, pincode);
+        return new Address(addressId, doorNumber, streetName, city, pincode);
+    }
+
+    public String getUserRole(){
+        System.out.print("Enter user role: ");
+        String userRole = sc.nextLine();
+        return userRole;
     }
 }
 

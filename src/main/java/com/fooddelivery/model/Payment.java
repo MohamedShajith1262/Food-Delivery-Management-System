@@ -1,8 +1,5 @@
 package com.fooddelivery.model;
 
-import com.fooddelivery.model.enums.PaymentMode;
-import com.fooddelivery.model.enums.PaymentStatus;
-
 import java.time.LocalDateTime;
 
 public class Payment {
@@ -10,52 +7,46 @@ public class Payment {
     private int paymentId;
     private double amount;
     private LocalDateTime paymentDate;
-    private PaymentMode paymentMode;
-    private PaymentStatus paymentStatus;
+    private String paymentMode;
+    private String paymentStatus;
     private Order order;
 
-    public Payment(int paymentId, double amount,
-                   PaymentMode paymentMode, Order order) {
+    public Payment(int paymentId, double amount, String paymentMode, Order order, LocalDateTime paymentDate) {
 
         if (amount < 0) {
             throw new IllegalArgumentException(
                     "Amount cannot be negative"
             );
         }
-
-        if (paymentMode == null || order == null) {
-            throw new IllegalArgumentException(
-                    "Payment mode and order are required"
-            );
-        }
-
         this.paymentId = paymentId;
         this.amount = amount;
         this.paymentMode = paymentMode;
         this.order = order;
-        this.paymentStatus = PaymentStatus.PENDING;
+        this.paymentStatus = "PENDING";
+        this.paymentDate = paymentDate;
     }
 
     public void processPayment() {
-        if (paymentStatus != PaymentStatus.PENDING) {
+        if (!paymentStatus.equalsIgnoreCase("PENDING")) {
             return;
         }
 
         if (amount == order.calculateTotal()) {
-            paymentStatus = PaymentStatus.SUCCESS;
-            paymentDate = LocalDateTime.now();
+            paymentStatus = "SUCCESS";
         } else {
-            paymentStatus = PaymentStatus.FAILED;
+            paymentStatus = "FAILED";
         }
     }
 
     public boolean isSuccessful() {
-        return paymentStatus == PaymentStatus.SUCCESS;
+        return paymentStatus.equalsIgnoreCase("SUCCESS");
     }
 
     public void refundPayment() {
-        if (paymentStatus == PaymentStatus.SUCCESS) {
-            paymentStatus = PaymentStatus.REFUNDED;
+        if (isSuccessful()) {
+            paymentStatus = "REFUNDED";
+        }else {
+            throw new IllegalStateException("Only Successful Payments can be Refunded...");
         }
     }
 
@@ -71,11 +62,11 @@ public class Payment {
         return paymentDate;
     }
 
-    public PaymentMode getPaymentMode() {
+    public String getPaymentMode() {
         return paymentMode;
     }
 
-    public PaymentStatus getPaymentStatus() {
+    public String getPaymentStatus() {
         return paymentStatus;
     }
 

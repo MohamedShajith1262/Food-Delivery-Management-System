@@ -1,7 +1,5 @@
 package com.fooddelivery.model;
 
-import com.fooddelivery.model.enums.OrderStatus;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,63 +9,57 @@ public class Order {
     private int orderId;
     private LocalDateTime orderDate;
     private double totalAmount;
-    private OrderStatus orderStatus;
+    private String orderStatus;
     private List<OrderItem> orderItems = new ArrayList<>();
     private Customer customer;
 
     public Order(int orderId, Customer customer) {
-        if (customer == null) {
-            throw new IllegalArgumentException(
-                    "Customer is required"
-            );
-        }
-
         this.orderId = orderId;
         this.customer = customer;
         this.orderDate = LocalDateTime.now();
-        this.orderStatus = OrderStatus.PLACED;
+        this.orderStatus = "PENDING";
         this.totalAmount = 0.0;
     }
 
     public void addOrderItem(OrderItem orderItem) {
-        if (orderItem != null
-                && orderItem.getQuantity() > 0
-                && !orderItems.contains(orderItem)) {
-
+        if (orderItem != null && orderItem.getQuantity() > 0 && !orderItems.contains(orderItem)) {
             orderItems.add(orderItem);
-            calculateTotal();
         }
     }
 
-    public void removeOrderItem(OrderItem orderItem) {
+  /*  public void removeOrderItem(OrderItem orderItem) {
         orderItems.remove(orderItem);
-        calculateTotal();
     }
-
+*/
     public List<OrderItem> getOrderItems() {
         return new ArrayList<>(orderItems);
     }
 
     public double calculateTotal() {
-        totalAmount = 0.0;
-
+        totalAmount = 0;
         for (OrderItem item : orderItems) {
             totalAmount += item.calculateSubtotal();
         }
-
         return totalAmount;
     }
 
-    public void updateStatus(OrderStatus status) {
-        if (status != null) {
-            this.orderStatus = status;
+    public void updateStatus(String status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null.");
         }
+
+        if ("CONFIRMED".equals(status) && !"PENDING".equals(orderStatus)) {
+            throw new IllegalStateException("Only pending orders can be confirmed...");
+        }
+        this.orderStatus = status;
     }
 
     public void cancelOrder() {
-        if (orderStatus == OrderStatus.PLACED
-                || orderStatus == OrderStatus.CONFIRMED) {
-            orderStatus = OrderStatus.CANCELLED;
+        if (orderStatus.equalsIgnoreCase("PENDING")
+                || orderStatus.equalsIgnoreCase("CONFIRMED")) {
+            orderStatus = "CANCELLED";
+        } else {
+            throw new IllegalStateException("Only pending or confirmed orders can be cancelled...");
         }
     }
 
@@ -83,7 +75,7 @@ public class Order {
         return totalAmount;
     }
 
-    public OrderStatus getOrderStatus() {
+    public String getOrderStatus() {
         return orderStatus;
     }
 

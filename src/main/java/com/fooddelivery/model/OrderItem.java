@@ -10,22 +10,8 @@ public class OrderItem {
     public OrderItem(int orderItemId, int quantity,
                      double itemPrice, FoodItem foodItem) {
 
-        if (quantity <= 0) {
-            throw new IllegalArgumentException(
-                    "Quantity must be greater than zero"
-            );
-        }
-
-        if (itemPrice < 0) {
-            throw new IllegalArgumentException(
-                    "Price cannot be negative"
-            );
-        }
-
-        if (foodItem == null) {
-            throw new IllegalArgumentException(
-                    "Food item is required"
-            );
+        if(foodItem == null || quantity <= 0 || itemPrice <= 0){
+            throw new IllegalArgumentException("Please Check your Order Items,every item must have a valid food selection and positive values...");
         }
 
         this.orderItemId = orderItemId;

@@ -14,7 +14,7 @@ public class MainView {
     }
 
     public void showMainMenu() {
-        System.out.println("\n----- MAIN MENU -----");
+        System.out.println("----- MAIN MENU -----");
         System.out.println("1. Login");
         System.out.println("2. Register");
         System.out.println("3. Exit");
